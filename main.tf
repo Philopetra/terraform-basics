@@ -8,15 +8,16 @@ terraform {
 }
 
 provider "google" {
-  project = "terraform-demo-486101"
-  region  = "us-central1"
+  project = var.project
+  region  = var.region
 }
 
 
 resource "google_storage_bucket" "demo-bucket" {
-  name          = "terraform-demo-486101-terra-bucket"
-  location      = "US"
+  name          = var.gcs_bucket_name
+  location      = var.location
   force_destroy = true
+
   # Add this line to satisfy the security constraint
   uniform_bucket_level_access = true
 
@@ -28,4 +29,10 @@ resource "google_storage_bucket" "demo-bucket" {
       type = "AbortIncompleteMultipartUpload"
     }
   }
+}
+
+
+resource "google_bigquery_dataset" "demo-dataset" {
+  dataset_id = var.bigquery_dataset_name
+  location = var.location
 }
